@@ -1,3 +1,8 @@
+/*there are directiories/subdirs and multiple type files like mp4 jpeg json txt doc mp3 aac etc...
+so we can find specific file extension and delete that.
+in current program we are finding jpeg files older than 2 hours and deleting them. 
+g++ delete_old_files.cpp -o delete_old_files.cpp
+*/
 #include <string>
 #include <dirent.h> 
 #include <sys/stat.h>
@@ -14,14 +19,14 @@ unsigned long int timestamp(std::string filename)
     //printf("File modify time in sec : %lu\n",filestat.st_mtime);
     return t_stamp_sec;
 }
-
+//skip directiories to avoid unnecessary search
 int list_dir_subdir_files(std::string dir_name,unsigned long int delete_before_ts) 
 { 
 	struct dirent *de; // Pointer for directory entry 
-	if(dir_name.find("Audio")!= std::string::npos){//skipping Audio directory
+	if(dir_name.find("audio_files")!= std::string::npos){//skipping Audio directory
 		return 0;
 	} 
-	if(dir_name.find("Recordings")!= std::string::npos){//skipping Recordings directory
+	if(dir_name.find("recording_files")!= std::string::npos){//skipping Recordings directory
 		return 0;
 	} 
 	if(dir_name.find(".jpeg")!= std::string::npos){//finding timestamp of jpeg files
@@ -48,9 +53,7 @@ int list_dir_subdir_files(std::string dir_name,unsigned long int delete_before_t
 int main(){
 	unsigned long int del_before_sec;
 	del_before_sec = time(NULL) - DEL_2HR_OLD_FILE;
-	//list_dir_subdir_files("/media/user",del_before_sec);
-	//list_dir_subdir_files("/home/user/nfs_share/SDCARD",del_before_sec);
-	list_dir_subdir_files("/mnt/sdcard0",del_before_sec);
+	list_dir_subdir_files("/home/user/backup_data",del_before_sec);
 return 0;
 }
 
